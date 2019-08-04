@@ -20,6 +20,11 @@ public class CodeminionApplication extends JFrame {
 		EventQueue.invokeLater(() -> {
 			CodeminionApplication ex = ctx.getBean(CodeminionApplication.class);
 			JOptionPane.showMessageDialog(ex, "CodeMinion!");
+			try {
+				new DummyScriptRunner().runScript();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			int exitCode = SpringApplication.exit(ctx, new ExitCodeGenerator() {
 				@Override
 				public int getExitCode() {
