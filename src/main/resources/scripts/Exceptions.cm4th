@@ -1,0 +1,98 @@
+"Menu" DEFINE "Classes|Exceptions" ENDDEF
+
+
+"TargetAreas" DEFINE "Class File" "Test Class File" ENDDEF
+
+
+"Properties" DEFINE
+	"String" "base.package.name"
+	"String" "class.name"
+	"Boolean" "set.parameter.message" 
+	"Boolean" "set.parameter.cause"
+ENDDEF
+
+
+"ConstructorParameters" DEFINE
+	""
+	"set.parameter.message" GET_PROPERTY true == IF
+		"String message" CONCAT
+	ENDIF
+	"set.parameter.cause" GET_PROPERTY true == IF
+		LENGTH 0 > IF
+			", " CONCAT
+		ENDIF
+		"Throwable cause" CONCAT
+	ENDIF
+ENDDEF
+
+
+"SuperParameters" DEFINE
+	""
+	"set.parameter.message" GET_PROPERTY true == IF
+		"message" CONCAT
+	ENDIF
+	"set.parameter.cause" GET_PROPERTY true == IF
+		LENGTH 0 > IF
+			", " CONCAT
+		ENDIF
+		"cause" CONCAT
+	ENDIF
+ENDDEF
+
+
+"ClassFile" DEFINE
+"package ${base.package.name};<|
+<|
+public ${class.name} {<|
+<|
+\t	public ${class.name}("
+
+ConstructorParameters CONCAT
+
+") {<|
+\t\t	super(" CONCAT
+
+SuperParameters CONCAT
+
+");<|
+\t	}<|
+<|
+}" CONCAT
+ENDDEF
+
+
+"CauseConstantStatement" DEFINE
+	"set.parameter.cause" GET_PROPERTY true == IF
+		'\t	private static final RuntimeException CAUSE = new RuntimeException();<|' CONCAT
+	ENDIF
+ENDDEF
+
+
+"MessageConstantStatement" DEFINE
+	"set.parameter.message" GET_PROPERTY true == IF
+		'\t	private static final String MESSAGE = "message";<|' CONCAT
+	ENDIF
+ENDDEF
+
+
+"TestClassFile" DEFINE
+"package ${base.package.name};<|
+<|
+public ${class.name}Test {<|
+<|"
+CauseConstantStatement
+MessageConstantStatement
+"<|
+\t	private ${class.name} unitUnderTest = new ${class.name}()
+ConstructorParameters
+
+") {<|
+\t\t	super("
+
+SuperParameters
+
+");<|
+\t	}<|
+<|
+}
+ENDDEF
