@@ -16,6 +16,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 
+import de.ollie.codeminion.gui.InternalFrameClassesExceptions;
+
 @SpringBootApplication
 public class CodeMinionApplication extends JFrame implements ActionListener {
 
@@ -77,6 +79,8 @@ public class CodeMinionApplication extends JFrame implements ActionListener {
 			closeApplication();
 		} else if (e.getSource() == this.menuItemClassesException) {
 			log.info("Menu item selected: Classes | Exception");
+			InternalFrameClassesExceptions ifce = new InternalFrameClassesExceptions();
+			this.desktopPane.add(ifce);
 		}
 	}
 
