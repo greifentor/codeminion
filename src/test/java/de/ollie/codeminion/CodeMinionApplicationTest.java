@@ -28,7 +28,7 @@ import org.springframework.context.ConfigurableApplicationContext;
  */
 public class CodeMinionApplicationTest {
 
-	private static final String CLASS_NAME = "Test";
+	private static final String CLASS_NAME = "TestException";
 	private static final String PACKAGE_NAME = "test.pack.age";
 
 	@DisplayName("Opens the application and closes it.")
@@ -73,7 +73,7 @@ public class CodeMinionApplicationTest {
 		JTextAreaOperator textAreaClass = new JTextAreaOperator(internalFrame, 0);
 		JTextAreaOperator textAreaTestClass = new JTextAreaOperator(internalFrame, 1);
 		assertEquals(getClassCode(cause, message), textAreaClass.getText());
-		assertEquals("", /* getTestClassCode(cause, message), */ textAreaTestClass.getText());
+		assertEquals(getTestClassCode(cause, message), textAreaTestClass.getText());
 		JMenuOperator menuApplication = new JMenuOperator(frame, 0);
 		menuApplication.doClick();
 		JMenuItemOperator menuItemQuit = new JMenuItemOperator(frame, 0);
@@ -84,8 +84,8 @@ public class CodeMinionApplicationTest {
 
 	private String getClassCode(boolean cause, boolean message) {
 		String s = "package " + PACKAGE_NAME + ";\n\n\n" //
-				+ "public class " + CLASS_NAME + "Exception extends Exception {\n\n" //
-				+ "\tpublic " + CLASS_NAME + "Exception (";
+				+ "public class " + CLASS_NAME + " extends Exception {\n\n" //
+				+ "\tpublic " + CLASS_NAME + " (";
 		String pl = "";
 		String p = "";
 		if (message) {
@@ -110,17 +110,18 @@ public class CodeMinionApplicationTest {
 	}
 
 	private String getTestClassCode(boolean cause, boolean message) {
-		String className = CLASS_NAME + "Exception";
 		String s = "package " + PACKAGE_NAME + ";\n\n";
+		s += "import static org.hamcrest.MatcherAssert.assertThat;\n";
+		s += "import static org.hamcrest.Matchers.equalTo;\n\n";
 		s += "import org.junit.Test;\n\n";
-		s += "public class " + className + "Test {\n\n";
+		s += "public class " + CLASS_NAME + "Test {\n\n";
 		if (cause) {
 			s += "\tprivate static final RuntimeException CAUSE = new RuntimeException();\n";
 		}
 		if (message) {
 			s += "\tprivate static final String MESSAGE = \"message\";\n";
 		}
-		s += "\n\tprivate " + className + " unitUnderTest = new " + className + "(MESSAGE, CAUSE);\n\n";
+		s += "\n\tprivate " + CLASS_NAME + " unitUnderTest = new " + CLASS_NAME + "(MESSAGE, CAUSE);\n\n";
 		if (cause) {
 			s += "\t@Test\n";
 			s += "\tpublic void constructorSetCauseCorrectly() {\n";

@@ -24,6 +24,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import de.ollie.codeminion.generators.ExceptionClassGenerator;
+import de.ollie.codeminion.generators.ExceptionTestClassGenerator;
 
 /**
  * An internal frame for the classes / exceptions generation tool.
@@ -39,9 +40,12 @@ public class InternalFrameClassesExceptions extends JInternalFrame implements Ac
 	private JCheckBox checkBoxCause = new JCheckBox();
 	private JCheckBox checkBoxMessage = new JCheckBox();
 	private JTextArea textAreaClassSourceCode = new JTextArea();
+	private JTextArea textAreaTestClassSourceCode = new JTextArea();
 	private JTextField textFieldClassName = new JTextField(30);
 	private JTextField textFieldPackageName = new JTextField(30);
+
 	private ExceptionClassGenerator classGenerator = new ExceptionClassGenerator();
+	private ExceptionTestClassGenerator testClassGenerator = new ExceptionTestClassGenerator();
 
 	public InternalFrameClassesExceptions() {
 		super("Exceptions", true, true);
@@ -101,51 +105,30 @@ public class InternalFrameClassesExceptions extends JInternalFrame implements Ac
 
 	private JPanel createTestClassPanel() {
 		JPanel p = new JPanel(new BorderLayout(HGAP, VGAP));
-		JTextArea a = new JTextArea();
-		a.setFont(new Font("monospaced", Font.PLAIN, 12));
-		p.add(new JScrollPane(a), BorderLayout.CENTER);
-		a.setText("package test.pack.age;\n" + //
-				"\n" + //
-				"import org.junit.Test;\n" + //
-				"\n" + //
-				"public class TestExceptionTest {\n" + //
-				"\n" + //
-				"	private static final RuntimeException CAUSE = new RuntimeException();\n" + //
-				"	private static final String MESSAGE = \"message\";\n" + //
-				"\n" + //
-				"	private TestException unitUnderTest = new TestException(MESSAGE, CAUSE);\n" + //
-				"\n" + //
-				"	@Test\n" + //
-				"	public void constructorSetCauseCorrectly() {\n" + //
-				"		assertThat(this.unitUnderTest.getCause(), equalTo(CAUSE));\n" + //
-				"	}\n" + //
-				"\n" + //
-				"	@Test\n" + //
-				"	public void constructorSetMessageCorrectly() {\n" + //
-				"		assertThat(this.unitUnderTest.getMessage(), equalTo(MESSAGE));\n" + //
-				"	}\n" + //
-				"\n" + //
-				"}");
-		a.setText("");
+		this.textAreaTestClassSourceCode.setFont(new Font("monospaced", Font.PLAIN, 12));
+		p.add(new JScrollPane(this.textAreaTestClassSourceCode), BorderLayout.CENTER);
 		return p;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		updateTextAreas();
+	}
+
+	private void updateTextAreas() {
 		System.out.println("##### " + this.textFieldClassName.getText() + ", " + this.textFieldPackageName.getText()
 				+ ", " + this.checkBoxCause.isSelected() + ", " + this.checkBoxMessage.isSelected());
 		this.textAreaClassSourceCode.setText(
 				this.classGenerator.generate(this.textFieldClassName.getText(), this.textFieldPackageName.getText(),
+						this.checkBoxCause.isSelected(), this.checkBoxMessage.isSelected()));
+		this.textAreaTestClassSourceCode.setText(
+				this.testClassGenerator.generate(this.textFieldClassName.getText(), this.textFieldPackageName.getText(),
 						this.checkBoxCause.isSelected(), this.checkBoxMessage.isSelected()));
 	}
 
 	@Override
 	public void itemStateChanged(ItemEvent arg0) {
-		System.out.println("##### " + this.textFieldClassName.getText() + ", " + this.textFieldPackageName.getText()
-				+ ", " + this.checkBoxCause.isSelected() + ", " + this.checkBoxMessage.isSelected());
-		this.textAreaClassSourceCode.setText(
-				this.classGenerator.generate(this.textFieldClassName.getText(), this.textFieldPackageName.getText(),
-						this.checkBoxCause.isSelected(), this.checkBoxMessage.isSelected()));
+		updateTextAreas();
 	}
 
 }

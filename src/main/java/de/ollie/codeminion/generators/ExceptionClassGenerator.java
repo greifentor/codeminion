@@ -26,8 +26,8 @@ public class ExceptionClassGenerator {
 	 */
 	public String generate(String className, String packageName, boolean cause, boolean message) {
 		String code = "package " + packageName + ";\n\n\n" //
-				+ "public class " + className + "Exception extends Exception {\n\n" //
-				+ "\tpublic " + className + "Exception (";
+				+ "public class " + className + " extends Exception {\n\n" //
+				+ "\tpublic " + className + " (";
 		String parameterList = "";
 		String parameters = "";
 		if (message) {
