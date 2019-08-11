@@ -177,7 +177,7 @@ public class CodeMinionApplicationTest {
 	public void clickTheExeptionItem_PressTheCopyButtonAfterCreatedAnExceptionClassCopiesItToTheClipboard()
 			throws Exception {
 		JFrameOperator frame = checkScenarioFor(false, false);
-		JButtonOperator buttonCopy = new JButtonOperator(frame, 2);
+		JButtonOperator buttonCopy = new JButtonOperator(frame, "Copy", 0);
 		buttonCopy.doClick();
 		String code = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
 		assertEquals(getClassCode(false, false), code);
@@ -189,7 +189,7 @@ public class CodeMinionApplicationTest {
 	public void clickTheExeptionItem_PressTheCopyButtonAfterCreatedAnExceptionTestClassCopiesItToTheClipboard()
 			throws Exception {
 		JFrameOperator frame = checkScenarioFor(true, true);
-		JButtonOperator buttonCopy = new JButtonOperator(frame, 5);
+		JButtonOperator buttonCopy = new JButtonOperator(frame, "Copy", 1);
 		buttonCopy.doClick();
 		String code = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
 		assertEquals(getTestClassCode(true, true), code);

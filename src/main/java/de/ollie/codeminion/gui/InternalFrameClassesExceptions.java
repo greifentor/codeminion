@@ -47,8 +47,8 @@ public class InternalFrameClassesExceptions extends JInternalFrame implements Ac
 	private static final int HGAP = 3;
 	private static final int VGAP = 3;
 
-	private JButton buttonCopyClass = new JButton("Copy1");
-	private JButton buttonCopyTestClass = new JButton("Copy2");
+	private JButton buttonCopyClass = new JButton("Copy");
+	private JButton buttonCopyTestClass = new JButton("Copy");
 	private JCheckBox checkBoxCause = new JCheckBox();
 	private JCheckBox checkBoxMessage = new JCheckBox();
 	private JTextArea textAreaClassSourceCode = new JTextArea();
