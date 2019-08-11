@@ -6,11 +6,15 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import java.awt.Toolkit;
+import java.awt.datatransfer.DataFlavor;
+
 import static org.hamcrest.Matchers.equalTo;
 
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.netbeans.jemmy.operators.JButtonOperator;
 import org.netbeans.jemmy.operators.JCheckBoxOperator;
 import org.netbeans.jemmy.operators.JFrameOperator;
 import org.netbeans.jemmy.operators.JInternalFrameOperator;
@@ -49,9 +53,10 @@ public class CodeMinionApplicationTest {
 	public void clickTheExceptionItem_OpensTheDialogForExceptionGeneratorAndCreatesAnExceptionClassAndTestWithCauseAndMessage()
 			throws Exception {
 		checkScenarioFor(true, true);
+		closeTheApplication();
 	}
 
-	private void checkScenarioFor(boolean cause, boolean message) throws Exception {
+	private JFrameOperator checkScenarioFor(boolean cause, boolean message) throws Exception {
 		CodeMinionApplication.applicationCloser = new TestApplicationCloser();
 		CodeMinionApplication.log = mock(Logger.class);
 		new CodeMinionApplication();
@@ -74,6 +79,11 @@ public class CodeMinionApplicationTest {
 		JTextAreaOperator textAreaTestClass = new JTextAreaOperator(internalFrame, 1);
 		assertEquals(getClassCode(cause, message), textAreaClass.getText());
 		assertEquals(getTestClassCode(cause, message), textAreaTestClass.getText());
+		return frame;
+	}
+
+	private void closeTheApplication() {
+		JFrameOperator frame = new JFrameOperator();
 		JMenuOperator menuApplication = new JMenuOperator(frame, 0);
 		menuApplication.doClick();
 		JMenuItemOperator menuItemQuit = new JMenuItemOperator(frame, 0);
@@ -143,6 +153,7 @@ public class CodeMinionApplicationTest {
 	public void clickTheExceptionItem_OpensTheDialogForExceptionGeneratorAndCreatesAnExceptionClassAndTestWithCauseOnly()
 			throws Exception {
 		checkScenarioFor(true, false);
+		closeTheApplication();
 	}
 
 	@DisplayName("Opens the exception generator dialog and creates an exception with message only and test.")
@@ -150,6 +161,7 @@ public class CodeMinionApplicationTest {
 	public void clickTheExceptionItem_OpensTheDialogForExceptionGeneratorAndCreatesAnExceptionClassAndTestWithMessageOnly()
 			throws Exception {
 		checkScenarioFor(false, true);
+		closeTheApplication();
 	}
 
 	@DisplayName("Opens the exception generator dialog and creates an exception with neither cause nor message and test.")
@@ -157,6 +169,31 @@ public class CodeMinionApplicationTest {
 	public void clickTheExceptionItem_OpensTheDialogForExceptionGeneratorAndCreatesAnExceptionClassAndTestWithNoParameters()
 			throws Exception {
 		checkScenarioFor(false, false);
+		closeTheApplication();
+	}
+
+	@DisplayName("Copies the class source code to the clipboard if copy button is clicked.")
+	@Test
+	public void clickTheExeptionItem_PressTheCopyButtonAfterCreatedAnExceptionClassCopiesItToTheClipboard()
+			throws Exception {
+		JFrameOperator frame = checkScenarioFor(false, false);
+		JButtonOperator buttonCopy = new JButtonOperator(frame, 2);
+		buttonCopy.doClick();
+		String code = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
+		assertEquals(getClassCode(false, false), code);
+		closeTheApplication();
+	}
+
+	@DisplayName("Copies the test class source code to the clipboard if copy button is clicked.")
+	@Test
+	public void clickTheExeptionItem_PressTheCopyButtonAfterCreatedAnExceptionTestClassCopiesItToTheClipboard()
+			throws Exception {
+		JFrameOperator frame = checkScenarioFor(true, true);
+		JButtonOperator buttonCopy = new JButtonOperator(frame, 5);
+		buttonCopy.doClick();
+		String code = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
+		assertEquals(getTestClassCode(true, true), code);
+		closeTheApplication();
 	}
 
 }
