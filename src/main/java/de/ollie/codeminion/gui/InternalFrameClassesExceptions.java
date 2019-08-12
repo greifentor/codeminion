@@ -64,6 +64,8 @@ public class InternalFrameClassesExceptions extends JInternalFrame implements Ac
 		this.setContentPane(createContentPanel());
 		this.pack();
 		this.setVisible(true);
+		this.setMaximizable(true);
+		this.setIconifiable(true);
 		try {
 			this.setMaximum(true);
 		} catch (Exception e) {
