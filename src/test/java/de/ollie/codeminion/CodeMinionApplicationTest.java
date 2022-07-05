@@ -1,6 +1,7 @@
 package de.ollie.codeminion;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -9,9 +10,7 @@ import static org.mockito.Mockito.verify;
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
 
-import static org.hamcrest.Matchers.equalTo;
-
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.netbeans.jemmy.operators.JButtonOperator;

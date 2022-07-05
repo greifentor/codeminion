@@ -28,7 +28,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import de.ollie.codeminion.CodeMinionApplication;
 import de.ollie.codeminion.generators.ExceptionClassGenerator;
@@ -42,7 +43,7 @@ import de.ollie.codeminion.generators.ExceptionTestClassGenerator;
  */
 public class InternalFrameClassesExceptions extends JInternalFrame implements ActionListener, ItemListener {
 
-	static Logger log = Logger.getLogger(CodeMinionApplication.class);
+	static Logger log = LogManager.getLogger(CodeMinionApplication.class);
 
 	private static final int HGAP = 3;
 	private static final int VGAP = 3;
